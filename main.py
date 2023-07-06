@@ -1,6 +1,9 @@
 import asyncio
 import os
-from aiogram import Bot, Dispatcher
+
+import requests
+from aiogram import Bot, Dispatcher, types
+
 
 bot = Bot(token=os.getenv(
     "TOKEN"))
@@ -9,22 +12,30 @@ dp = Dispatcher(bot=bot)
 
 async def send_message(id, message):
     try:
-        await bot.send_message(chat_id=id, text=message)
-        print("Сообщение успешно отправлено!")
+        await bot.send_message(chat_id=id, text=message, reply_markup=types.ReplyKeyboardRemove())
     except Exception as e:
-        print(f"Ошибка при отправке сообщения: {str(e)}")
+       await bot.send_message(chat_id=id, text="Ошибка при отправке сообщения", reply_markup=types.ReplyKeyboardRemove())
 
 
 async def main():
     user_id = os.getenv("USER_ID")
     message = os.getenv("MESSAGE")
     files = os.getenv('FILES')
+    start_cons = os.getenv('CONS', False)
 
-    if files:
+
+    if files != "":
         for file in files:
             await bot.send_document(user_id, file)
 
-    await send_message(user_id, message)
+    if start_cons != "False" and start_cons:
+        requests.post(f'{os.getenv("URL_PATH")}chats/create/', {
+                    'chat_id': user_id,
+                    'username': os.getenv('USERNAME'),
+                    'token': os.environ.get('TOKEN'),
+                }) 
+    
+    await send_message(int(user_id), message)
     await bot.close()
 
 
