@@ -39,6 +39,7 @@ async def main():
             'chat_id': user_id,
             'username': os.getenv('USERNAME'),
             'token': os.environ.get('TOKEN'),
+            'is_active': True
         })
 
     await send_message(int(user_id), message)
