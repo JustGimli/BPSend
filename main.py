@@ -24,8 +24,7 @@ async def main():
     start_cons = os.getenv('CONS', False)
 
     if files != "":
-        for file in files:
-            await bot.send_document(user_id, file)
+        await bot.send_document(user_id, files)
 
     if start_cons != "False" and start_cons:
         requests.post(f'{os.getenv("URL_PATH")}consultation/create/', {
@@ -42,7 +41,8 @@ async def main():
             'is_active': True
         })
 
-    await send_message(int(user_id), message)
+    if (message):
+        await send_message(int(user_id), message)
     await bot.close()
 
 
