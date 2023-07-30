@@ -24,13 +24,14 @@ async def main():
     start_cons = os.getenv('CONS', False)
 
     if files != "":
-        await bot.send_document(user_id, files)
+        await bot.send_document(int(user_id), document=files)
 
     if start_cons != "False" and start_cons:
         requests.post(f'{os.getenv("URL_PATH")}consultation/create/', {
             'scenario': os.getenv('SCENARIO'),
             'username': os.getenv('USERNAME'),
             'token': os.environ.get('TOKEN'),
+            'duration': os.environ.get('END_TIME'),
 
         })
 
@@ -41,7 +42,7 @@ async def main():
             'is_active': True
         })
 
-    if (message):
+    if (len(message)):
         await send_message(int(user_id), message)
     await bot.close()
 
