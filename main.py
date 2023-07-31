@@ -1,5 +1,6 @@
 import asyncio
 import os
+import json
 
 import requests
 from aiogram import Bot, Dispatcher, types
@@ -31,7 +32,7 @@ async def main():
             'scenario': os.getenv('SCENARIO'),
             'username': os.getenv('USERNAME'),
             'token': os.environ.get('TOKEN'),
-            'duration': os.environ.get('END_TIME'),
+            'end_time': os.environ.get('END_TIME'),
 
         })
 
