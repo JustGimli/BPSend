@@ -1,6 +1,5 @@
 import asyncio
 import os
-import json
 
 import requests
 from aiogram import Bot, Dispatcher, types
@@ -40,7 +39,7 @@ async def main():
             start_message = data.json().get("start_message")
 
             if start_message:
-                await send_message(int(user_id), desc)
+                await send_message(int(user_id), start_message)
 
     if (len(message)):
         await send_message(int(user_id), message)
