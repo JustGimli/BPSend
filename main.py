@@ -24,11 +24,11 @@ async def main():
     files = os.getenv('FILES')
     start_cons = os.getenv('CONS', False)
 
-    if files != "":
+    if files != "" and files:
         await bot.send_document(int(user_id), document=files)
 
     if start_cons != "False" and start_cons:
-        requests.post(f'{os.getenv("URL_PATH")}consultation/create/', {
+        data = requests.post(f'{os.getenv("URL_PATH")}consultation/create/', {
             'scenario': os.getenv('SCENARIO'),
             'username': os.getenv('USERNAME'),
             'token': os.environ.get('TOKEN'),
@@ -36,12 +36,11 @@ async def main():
 
         })
 
-        requests.post(f'{os.getenv("URL_PATH")}chats/create/', {
-            'chat_id': user_id,
-            'username': os.getenv('USERNAME'),
-            'token': os.environ.get('TOKEN'),
-            'is_active': True
-        })
+        if data.status_code == 201:
+            start_message = data.json().get("start_message")
+
+            if start_message:
+                await send_message(int(user_id), desc)
 
     if (len(message)):
         await send_message(int(user_id), message)
